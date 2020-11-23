@@ -17,21 +17,22 @@ class Hero:
         self.kills = 0
 
     def fight(self, opponent):
-        if self.is_alive() is True:
+        while self.is_alive() is True and opponent.is_alive() is True:
             opponent.take_damage(self.attack())
-        else:
+            if opponent.is_alive() is True:
+                self.take_damage(opponent.attack())
+
+        if self.is_alive() is False:
             opponent.add_kill(1)
             self.add_death(1)
             print(f"{self.name} has been defeated")
             return self.name
-        if opponent.is_alive() is True:
-            self.take_damage(opponent.attack())
-        else:
+
+        if opponent.is_alive() is False:
             self.add_kill(1)
             opponent.add_death(1)
             print(f"{opponent.name} has been defeated")
             return opponent.name
-        self.fight(opponent)
 
     def add_ability(self, ability):
         self.abilities.append(ability)
@@ -78,10 +79,3 @@ class Hero:
 
     def __str__(self):
         return f'{self.name}'
-
-
-if __name__ == "__main__":
-    hero = Hero("Wonder Woman")
-    weapon = Weapon("Lasso of Truth", 90)
-    hero.add_weapon(weapon)
-    print(hero.attack())
